@@ -1,7 +1,6 @@
 using System;
+using UnityEngine;
 
-namespace AssemblyCSharp
-{
 	//structure represent a single point in 2D space. 
 	public struct Point
 	{
@@ -11,5 +10,5 @@ namespace AssemblyCSharp
 			this.y=y;
 		}
 	}
-}
+
 

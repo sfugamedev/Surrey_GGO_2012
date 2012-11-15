@@ -16,9 +16,9 @@ public class TiledObj : GDCObject {
 	protected uint _tileType;
 	// Use this for initialization
 	void Start () {
-		pos=new Point(0,0);
-		dim=new Dimension(0,0);
-		tileType=0x00;
+		_pos=new Point(0,0);
+		_dim=new Dimension(0,0);
+		_tileType=0x00;
 	}
 	public void hit(TiledObj obj){
 	}
@@ -48,5 +48,13 @@ public class TiledObj : GDCObject {
 	}
 	public uint tileType{
 		get {return _tileType;}
+	}
+	public int x{
+		get {return _pos.x;}
+		set {_vel.x=(value-_pos.x);}
+	}
+		public int y{
+		get {return _pos.y;}
+		set {_vel.y=(value-_pos.y);}
 	}
 }
