@@ -6,13 +6,17 @@ public class Game : MonoBehaviour{
 
 	private GridController grid;
 	private Level level;
+	
+	// A Tile Object field now appears in the Inspector view 
+	public GameObject tileObject;
+	
 	// Use this for initialization
 	void Start () {
 		
 	grid = new GridController();
-	level = new Level(grid);
-	//	level=(Level)GameObject.Instantiate(Resources.Load("Level"));
-		//UnityEngine.GameObject:AddComponent();
+	
+	// Pass tile object to level
+	level = new Level(grid, tileObject);
 	
 	}
 	
