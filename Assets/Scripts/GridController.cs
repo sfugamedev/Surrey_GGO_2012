@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridController
+public class GridController : MonoBehaviour
 {
 	private  List<TiledObj> objList;
 	//depth represents the depth of the tiled map. how many tiles can occupy a single space. 
@@ -15,11 +15,12 @@ public class GridController
 	public GridController ()
 	
 	{
+		objList = new List<TiledObj> ();
 	}
 	// Use this for initialization
 	void Start ()
 	{
-		objList = new List<TiledObj> ();
+		
 	}
 	
 	// Update is called once per frame
@@ -97,7 +98,8 @@ public class GridController
 	}
 	public void insertTile(TiledObj tile){
 		objList.Add(tile);
-		moveTile (tile, tile.pos);
+		
+		moveTile (tile, tile.vel);
 	}
 	private void moveTile (TiledObj tile, Point newPos)
 	{
@@ -148,6 +150,7 @@ public class GridController
 				}
 			}
 		}
+		tile.setPos(newPos.x, newPos.y);
 	}
 	
 	public void initializeLevel (Dimension dim)

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Level {
+public class Level : MonoBehaviour {
 	private GridController grid;
 	private Dimension levelDim;
 	
@@ -40,18 +40,18 @@ public class Level {
 		{
 			for(int y=0;y<levelDim.height;y++)
 			{
-				//HOW IN THE HELL DO YOU INITIALIZE PREFABS
-				//Object obj=Resources.Load("Tile");
-				
-				//TiledObj tile=(TiledObj)GameObject.Instantiate(obj);
-				//TiledObj tile =  (TiledObj)GameObject.Instantiate(Resources.Load("Tile"));
-				//TiledObj tile =  (TiledObj)GameObject.Instantiate(obj);
-				//AddComponent(tile);
-				
+				//TiledObj tile =  GameObject.Instantiate(Resources.Load("Tile"));
+				GameObject tileResource =  (GameObject)GameObject.Instantiate(Resources.Load("Tile"));
+				//TiledObj newTile = (TiledObj)tile.GetComponent<TiledObj>();
+			//tile.GetComponent(TiledObj).hello;
+				//Debug.Log("Hello");
+				TiledObj tile=tileResource.GetComponent(typeof(TiledObj)) as TiledObj;
+				//string s=tile.GetComponent("TiledObj").hello;
 				//After creating the tile, add it to the grid and set its location. 
-			//	tile.x=x;
-				//tile.y=y;
-				//grid.insertTile(tile);
+				tile.x=x;
+				tile.y=y;
+				
+				grid.insertTile(tile);
 		}
 		}
 	}
