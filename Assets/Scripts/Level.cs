@@ -28,12 +28,12 @@ public class Level : MonoBehaviour {
 	{
 		// Method 1
 		// Via member variable
-		GameObject.Instantiate(tileObject, Vector3.zero, Quaternion.identity);
+		//GameObject.Instantiate(tileObject, Vector3.zero, Quaternion.identity);
 		
 		// Method 2
 		// Via Resources.Load and Instantiate
-		GameObject tilePrefab = Resources.Load("Prefabs/Tile") as GameObject;
-		GameObject.Instantiate(tilePrefab, Vector3.one, Quaternion.identity);
+		//GameObject tilePrefab = Resources.Load("Prefabs/Tile") as GameObject;
+		//GameObject.Instantiate(tilePrefab, Vector3.one, Quaternion.identity);
 		
 		newPos=new Point(0,0);
 		for(int x=0;x<levelDim.width;x++)
@@ -41,7 +41,7 @@ public class Level : MonoBehaviour {
 			for(int y=0;y<levelDim.height;y++)
 			{
 				//TiledObj tile =  GameObject.Instantiate(Resources.Load("Tile"));
-				GameObject tileResource =  (GameObject)GameObject.Instantiate(Resources.Load("Tile"));
+				GameObject tileResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Tile"));
 				//TiledObj newTile = (TiledObj)tile.GetComponent<TiledObj>();
 			//tile.GetComponent(TiledObj).hello;
 				//Debug.Log("Hello");
