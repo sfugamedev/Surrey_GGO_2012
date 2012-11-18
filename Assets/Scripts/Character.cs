@@ -21,13 +21,13 @@ public class Character : TiledObj {
 		if(!right)
 			{
 				right=true;
-				x=1;
+				setVel (1,0);
 			}
 		}else if(h<0)
 		{
 				if(!left){
 				left=true;
-				x=-1;
+					setVel (-1,0);
 			}
 		}else{
 			right=false;
@@ -39,18 +39,24 @@ public class Character : TiledObj {
 			if(!up)
 			{
 				up=true;
-				y=1;
+					setVel (0,1);
 			}
 		}else if(v<0){
 				if(!down)
 			{
 				down=true;
-				y=-1;
+					setVel (0,-1);
 			}
 		}else{
 			up=false;
 			down=false;
 		}
 		moveTile ();
+	}
+	public override void collide(TiledObj tile){
+	    if(tile.solid){
+			tile.setVel(tile.x-x, tile.y-y);
+		}
+		base.collide(tile);
 	}
 }

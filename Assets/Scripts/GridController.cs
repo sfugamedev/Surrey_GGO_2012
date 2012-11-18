@@ -44,6 +44,8 @@ public class GridController : MonoBehaviour
 		
 		bool resolve;
 	List<TiledObj> unresolved = new List<TiledObj> ();
+		List<TiledObj> nativeTiles = new List<TiledObj> ();
+		
 		//itterate over all of the tiled object we current have. Only modify the ones that seem to have changed position, eg have velocity. 
 		for (int i=0; i<list.Count; i++)
 		{
@@ -71,6 +73,11 @@ public class GridController : MonoBehaviour
 						//if nativeTile is null, then nothing occupies that particular depth. Skip it. 
 						if (nativeTile != null) 
 						{
+							tile.collide(nativeTile);
+							nativeTile.collide(tile);
+							//create a list of native tiles. There is a chance that this collision caused some change in velocity 
+							//in the native tile. We may have to resolve that velocity before we are finished, hence storing it to check later. 
+							nativeTiles.Add(nativeTile);
 							//if the tile occupying my desired location is solid, then my motion has not yet been resolved. 
 							if (nativeTile.solid)
 							{
@@ -96,15 +103,29 @@ public class GridController : MonoBehaviour
 				//so here, just move the object according to its remaining velocity. 
 			}
 		}
-		if(unresolved.Count==0 || unresolved.Count==list.Count){
+		if(unresolved.Count==0 || unresolved.Count==list.Count)
+		{
 			
 			//if unresolved count is 0, then all items have been resolved and we can finish all collision code. 
 			//if the input list is the same length as we have unresolved tiles, then it is impossible to resolve any more than what we have. We are done. 
-			for(int i=0;i<unresolved.Count;i++){
+			for(int i=0;i<unresolved.Count;i++)
+			{
 				unresolved[i].stopVel();
 			}
 		}else{
 			//else, continue to resolve tiles. 
+			//
+			//check all of the tiles that were collided with. Some velocities may have changed. 
+			for(int i=0;i<nativeTiles.Count;i++)
+			{
+				tile = nativeTiles [i];
+			vel = tile.vel;
+				//if the veslocity did in fact change, then add it to the list of unresolved objects to be resolved next pass. 
+			if (vel.x != 0 || vel.y != 0) 
+				{
+					unresolved.Add(tile);
+				}
+			}
 			resolveTiles (unresolved);
 		}
 	}

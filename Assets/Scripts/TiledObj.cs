@@ -30,6 +30,8 @@ public class TiledObj : GDCObject {
 	void Update () {
 		moveTile();
 	}
+	public virtual void collide(TiledObj tile){
+	}
 	protected void moveTile(){
 		int tileSize=6;
 		Vector3 setPos = new Vector3(transform.position.x+(_pos.x*tileSize-transform.position.x)/40, depth,transform.position.z+(_pos.y*tileSize-transform.position.z)/40);
