@@ -16,6 +16,7 @@ public class TiledObj : GDCObject {
 	protected uint _tileType;
 	// Use this for initialization
 	public string hello= "hello";
+	public int depth=0;
 	void Start () {
 		//does start get called more than once? SOmething like that. Was breaking my stuff. So I needed to instantiate  _point up above. 
 		//__pos=new Point(0,0);
@@ -27,7 +28,11 @@ public class TiledObj : GDCObject {
 	}
 	// Update is called once per frame
 	void Update () {
-		Vector3 setPos = new Vector3(transform.position.x+(_pos.x*2-transform.position.x)/40, 0,transform.position.z+(_pos.y*2-transform.position.z)/40);
+		moveTile();
+	}
+	protected void moveTile(){
+		int tileSize=6;
+		Vector3 setPos = new Vector3(transform.position.x+(_pos.x*tileSize-transform.position.x)/40, depth,transform.position.z+(_pos.y*tileSize-transform.position.z)/40);
 		//Simply calling position.Set() did not change the positon. Need to set it to a new Vector3 object. 
 		this.transform.position=setPos;
 	}
@@ -56,15 +61,28 @@ public class TiledObj : GDCObject {
 	}
 	public int x{
 		get {return _pos.x;}
-		set {_vel.x=(value-_pos.x);}
+		set {_vel.x=value;}
 	}
 		public int y{
 		get {return _pos.y;}
-		set {_vel.y=(value-_pos.y);}
+		set {_vel.y=value;}
 	}
 	public void setPos(int x, int y)
 	{
 		_pos.x=x;
 		_pos.y=y;
+		
+}
+		public void setVel(int x, int y)
+	{
+		_vel.x=x;
+		_vel.y=y;
+		
+}
+		public void stopVel()
+	{
+		_vel.x=0;
+		_vel.y=0;
+		
 }
 }

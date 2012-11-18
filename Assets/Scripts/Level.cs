@@ -48,12 +48,47 @@ public class Level : MonoBehaviour {
 				TiledObj tile=tileResource.GetComponent(typeof(TiledObj)) as TiledObj;
 				//string s=tile.GetComponent("TiledObj").hello;
 				//After creating the tile, add it to the grid and set its location. 
-				tile.x=x;
-				tile.y=y;
-				
+				tile.setVel(x,y);
 				grid.insertTile(tile);
 		}
 		}
+			GameObject wallResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Wall"));
+		TiledObj wallTile=wallResource.GetComponent(typeof(SolidTiledObj)) as TiledObj;
+		wallTile.x=5;
+		//wallTile.y=5;
+		//grid.insertTile(wallTile);
+		
+			wallResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Wall"));
+		wallTile=wallResource.GetComponent(typeof(SolidTiledObj)) as TiledObj;
+		wallTile.x=4;
+		wallTile.y=5;
+			grid.insertTile(wallTile);
+		
+			wallResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Wall"));
+		wallTile=wallResource.GetComponent(typeof(SolidTiledObj)) as TiledObj;
+		wallTile.x=3;
+		wallTile.y=5;
+			grid.insertTile(wallTile);
+		
+			wallResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Wall"));
+		wallTile=wallResource.GetComponent(typeof(SolidTiledObj)) as TiledObj;
+		wallTile.x=2;
+		wallTile.y=5;
+			grid.insertTile(wallTile);
+		
+			wallResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Wall"));
+		wallTile=wallResource.GetComponent(typeof(SolidTiledObj)) as TiledObj;
+		wallTile.x=2;
+		wallTile.y=4;
+			grid.insertTile(wallTile);
+		
+		GameObject heroResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Hero"));
+		TiledObj heroTile=heroResource.GetComponent(typeof(Character)) as TiledObj;
+		heroTile.x=10;
+		heroTile.y=10;
+		
+		grid.insertTile(heroTile);
+		
 	}
 
 }

@@ -1,7 +1,6 @@
 using System;
+using UnityEngine;
 
-namespace AssemblyCSharp
-{
 	public class SolidTiledObj : TiledObj
 	{
 		public SolidTiledObj ()
@@ -11,8 +10,9 @@ namespace AssemblyCSharp
 		// Use this for initialization
 	void Start () 
 		{
+			base.depth=1;
 		base._solid=true;
 	}
 	}
-}
+
 

@@ -28,21 +28,25 @@ public class GridController : MonoBehaviour
 	{
 		
 	}
-	private TiledObj[] depthList;
-		private TiledObj tile;
-		private TiledObj nativeTile;
-		private Point vel;
-		private Dimension dim;
-		private Point newPos = new Point(0,0);
-	
-		
-		private bool resolve;
-		private List<TiledObj> unresolved = new List<TiledObj> ();
+	public void updateGrid(){
+		resolveTiles(objList);
+	}
+
 	private void resolveTiles (List<TiledObj> list)
 	{
+		TiledObj[] depthList;
+	TiledObj tile;
+		TiledObj nativeTile;
+	 Point vel;
+		Dimension dim;
+		 Point newPos = new Point(0,0);
 	
+		
+		bool resolve;
+	List<TiledObj> unresolved = new List<TiledObj> ();
 		//itterate over all of the tiled object we current have. Only modify the ones that seem to have changed position, eg have velocity. 
-		for (int i=0; i<list.Count; i++) {
+		for (int i=0; i<list.Count; i++)
+		{
 			tile = list [i];
 			vel = tile.vel;
 			//if the tile has velocity. 
@@ -60,12 +64,16 @@ public class GridController : MonoBehaviour
 					y++)
 					//TODO: right now, assumes that we are always checking within the bounds of the level. We need to make an efficient check for this beforehand. 
 						
-					for (int j=0; j<depth; j++) {
+					for (int j=0; j<depth; j++)
+					{
+
 						nativeTile = grid [x,y,j];
 						//if nativeTile is null, then nothing occupies that particular depth. Skip it. 
-						if (nativeTile != null) {
+						if (nativeTile != null) 
+						{
 							//if the tile occupying my desired location is solid, then my motion has not yet been resolved. 
-							if (nativeTile.solid) {
+							if (nativeTile.solid)
+							{
 								resolve = false;
 							}
 						} else {
@@ -89,8 +97,12 @@ public class GridController : MonoBehaviour
 			}
 		}
 		if(unresolved.Count==0 || unresolved.Count==list.Count){
+			
 			//if unresolved count is 0, then all items have been resolved and we can finish all collision code. 
 			//if the input list is the same length as we have unresolved tiles, then it is impossible to resolve any more than what we have. We are done. 
+			for(int i=0;i<unresolved.Count;i++){
+				unresolved[i].stopVel();
+			}
 		}else{
 			//else, continue to resolve tiles. 
 			resolveTiles (unresolved);
@@ -104,7 +116,7 @@ public class GridController : MonoBehaviour
 	private void moveTile (TiledObj tile, Point newPos)
 	{
 		TiledObj nativeTile;
-	
+	Dimension dim=tile.dim;
 			//REMOVE TILE FROM OLD POSITION
 		for (int x=tile.x;
 				x<tile.x+dim.width;
@@ -114,6 +126,7 @@ public class GridController : MonoBehaviour
 					y++) {
 				
 				for (int j=0; j<depth; j++) {
+					
 					nativeTile = grid [x,y,j];
 					//add to the end of the depth list.  
 					if (nativeTile == tile) 
@@ -130,12 +143,14 @@ public class GridController : MonoBehaviour
 			}
 		}
 		//ADD TO NEW POSITION
-		for (int x=tile.x;
-				x<tile.x+dim.width;
-				x++) {
-			for (int y=tile.y;
-					y<tile.y+dim.height;
-					y++) {
+		for (int x=newPos.x;
+				x<newPos.x+dim.width;
+				x++)
+		{
+			for (int y=newPos.y;
+					y<newPos.y+dim.height;
+					y++) 
+			{
 				
 				for (int j=0; j<depth; j++) {
 					nativeTile = grid [x,y,j];
@@ -151,6 +166,7 @@ public class GridController : MonoBehaviour
 			}
 		}
 		tile.setPos(newPos.x, newPos.y);
+		tile.stopVel();
 	}
 	
 	public void initializeLevel (Dimension dim)
