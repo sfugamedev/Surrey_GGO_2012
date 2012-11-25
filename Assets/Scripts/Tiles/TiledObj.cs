@@ -12,6 +12,7 @@ public class TiledObj : GDCObject {
 	//used to determine whether this particular tiled object should be solid, not allowing objects to pass through or over it. 
 	//READ ONLY
 	protected bool _solid;
+	protected bool _canMove;
 	//represents the velocity of the tile through space. 
 	private Point _vel;
 	protected uint _tileType;
@@ -58,6 +59,9 @@ public class TiledObj : GDCObject {
 	}
 	public bool solid{
 		get {return _solid;}
+	}
+	public bool canMove{
+		get {return _canMove;}
 	}
 	public uint tileType{
 		get {return _tileType;}

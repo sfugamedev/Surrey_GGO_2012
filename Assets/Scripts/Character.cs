@@ -54,7 +54,7 @@ public class Character : TiledObj {
 		moveTile ();
 	}
 	public override void collide(TiledObj tile){
-	    if(tile.solid){
+	    if(tile.solid && tile.canMove){
 			tile.setVel(tile.x-x, tile.y-y);
 		}
 		base.collide(tile);
