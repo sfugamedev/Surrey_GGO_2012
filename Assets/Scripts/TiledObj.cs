@@ -8,6 +8,7 @@ public class TiledObj : GDCObject {
 	private Point _pos = new Point(0,0);
 	//grid value's representing dimensions.
 	private Dimension _dim=new Dimension(1,1);
+	public static int TILE_SIZE = 6;
 	//used to determine whether this particular tiled object should be solid, not allowing objects to pass through or over it. 
 	//READ ONLY
 	protected bool _solid;
@@ -33,7 +34,7 @@ public class TiledObj : GDCObject {
 	public virtual void collide(TiledObj tile){
 	}
 	protected void moveTile(){
-		int tileSize=6;
+		int tileSize= TILE_SIZE;
 		Vector3 setPos = new Vector3(transform.position.x+(_pos.x*tileSize-transform.position.x)/40, depth,transform.position.z+(_pos.y*tileSize-transform.position.z)/40);
 		//Simply calling position.Set() did not change the positon. Need to set it to a new Vector3 object. 
 		this.transform.position=setPos;
@@ -72,19 +73,16 @@ public class TiledObj : GDCObject {
 	public void setPos(int x, int y)
 	{
 		_pos.x=x;
-		_pos.y=y;
-		
-}
-		public void setVel(int x, int y)
+		_pos.y=y;	
+	}
+	public void setVel(int x, int y)
 	{
 		_vel.x=x;
 		_vel.y=y;
-		
-}
-		public void stopVel()
+	}
+	public void stopVel()
 	{
 		_vel.x=0;
 		_vel.y=0;
-		
-}
+	}
 }

@@ -194,7 +194,7 @@ public class GridController : MonoBehaviour
 	{
 		/*take the width and height of the level, and the fact that we are going to allow 3 tiles to sit in the same location, hense the 3D space. 
 		we may even use this depth as our means of layering elements such as items over top of other tiles. 
-	each tile would have a desired depth, 0, 1, or 2. We would render them as best we could. */
+	    each tile would have a desired depth, 0, 1, or 2. We would render them as best we could. */
 		grid = new TiledObj[dim.width, dim.height, depth];
 	}
 }

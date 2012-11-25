@@ -17,7 +17,7 @@ public class Level : MonoBehaviour {
 		// Receive passed tile object
 		this.tileObject = tileObject;
 		
-		levelDim = new Dimension(30,30);
+		levelDim = new Dimension(10,10);
 		grid.initializeLevel(levelDim);
 		
 		initLevel ();
@@ -84,11 +84,16 @@ public class Level : MonoBehaviour {
 		
 		GameObject heroResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Hero"));
 		TiledObj heroTile=heroResource.GetComponent(typeof(Character)) as TiledObj;
-		heroTile.x=10;
-		heroTile.y=10;
+		heroTile.x=9;
+		heroTile.y=9;
 		
 		grid.insertTile(heroTile);
 		
+	}
+	
+	public Dimension getLevelDimensions()
+	{
+		return levelDim;
 	}
 
 }
