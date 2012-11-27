@@ -12,19 +12,23 @@ public class TiledObj : GDCObject {
 	//used to determine whether this particular tiled object should be solid, not allowing objects to pass through or over it. 
 	//READ ONLY
 	protected bool _solid;
-	protected bool _canMove;
+	protected bool isMoving=false;
 	//represents the velocity of the tile through space. 
 	private Point _vel;
 	protected uint _tileType;
 	// Use this for initialization
 	public string hello= "hello";
 	public int depth=0;
+	private GridController grid;
+	//boolean value used to disable tile movement. Indicates to different systems that the tiel is cirrently animating, or is in some kind of transition. 
+	protected bool _canMove=true;
 	void Start () {
 		//does start get called more than once? SOmething like that. Was breaking my stuff. So I needed to instantiate  _point up above. 
 		//__pos=new Point(0,0);
 		
 		//_dim=
 		_tileType=0x00;
+		grid=(GridController)GameObject.FindObjectOfType(typeof(GridController));
 	}
 	public void hit(TiledObj obj){
 	}
@@ -32,13 +36,34 @@ public class TiledObj : GDCObject {
 	void Update () {
 		moveTile();
 	}
+	//return true if this method is meant to change velocity of the tile it is hitting. False if no change is intended. 
 	public virtual void collide(TiledObj tile){
+		
 	}
-	protected void moveTile(){
-		int tileSize= TILE_SIZE;
-		Vector3 setPos = new Vector3(transform.position.x+(_pos.x*tileSize-transform.position.x)/40, depth,transform.position.z+(_pos.y*tileSize-transform.position.z)/40);
+	public virtual void onOver(TiledObj tile){
+		
+	}
+	public virtual void onLeave(TiledObj tile){
+		
+	}
+	protected void moveTile()
+	{
+		int tileSize=TILE_SIZE;
+		float dx = _pos.x*tileSize-transform.position.x;
+			float dy = _pos.y*tileSize-transform.position.z;
+		Vector3 setPos = new Vector3(transform.position.x+dx/40, depth,transform.position.z+dy/40);
 		//Simply calling position.Set() did not change the positon. Need to set it to a new Vector3 object. 
 		this.transform.position=setPos;
+		if(dx+dy<1)
+		{
+			if(isMoving)
+			{
+				isMoving=false;
+				movementComplete();
+			}
+		}else{
+			isMoving=true;
+		}
 	}
 		public Point vel{
 		get {return _vel;}
@@ -60,7 +85,7 @@ public class TiledObj : GDCObject {
 	public bool solid{
 		get {return _solid;}
 	}
-	public bool canMove{
+		public bool canMove{
 		get {return _canMove;}
 	}
 	public uint tileType{
@@ -77,16 +102,40 @@ public class TiledObj : GDCObject {
 	public void setPos(int x, int y)
 	{
 		_pos.x=x;
-		_pos.y=y;	
-	}
-	public void setVel(int x, int y)
+		_pos.y=y;
+		
+}
+		public void setVel(int x, int y)
 	{
+		if(_canMove)
+		{
 		_vel.x=x;
 		_vel.y=y;
-	}
-	public void stopVel()
+			if(!(x==0 &&y==0)){
+				//TODO:
+				//because of how untiy instantiated prefabs, sometimes the GridCOntroller is not available when this object instantiates. This fetches it whenver it is needed. 
+				//Im assuming this in not very efficient. 
+				grid=(GridController)GameObject.FindObjectOfType(typeof(GridController));
+			grid.resolveMovement(this);
+			}
+		}
+		
+}
+		public void stopVel()
 	{
 		_vel.x=0;
 		_vel.y=0;
+		
+}
+	public void completeMovement(){
+		
+	}
+	//the physics engine does a collide the instant a tile wants to move into a space. 
+	//some actions need to wait until the movement of said tile is complete before triggering. 
+	//because of this, we have created another kind of collision that needs to be defined by the object animating. 
+	public void movementComplete()
+	{
+			grid=(GridController)GameObject.FindObjectOfType(typeof(GridController));
+			grid.doOverCollide(this);
 	}
 }

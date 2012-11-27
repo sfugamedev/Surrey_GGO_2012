@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections;
 
-public class Character : TiledObj {
-
+public class Character : TiledObj 
+{
+	public static uint TILE_TYPE=0x01;
 	// Use this for initialization
 	void Start () {
 	depth=2;
+		this._tileType=TILE_TYPE;
 	}
 	private bool right=false;
 	private bool left=false;

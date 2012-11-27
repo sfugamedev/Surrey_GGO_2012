@@ -30,10 +30,10 @@ public class GridController : MonoBehaviour
 	}
 	public void updateGrid(){
 		//resolveTiles(objList);
-		resolveTiles(resolveTileList);
+		resolveTiles(objList, true);
 	}
 
-	private void resolveTiles (List<TiledObj> list)
+	private void resolveTiles (List<TiledObj> list, bool doCollisions)
 	{
 		TiledObj[] depthList;
 	TiledObj tile;
@@ -44,7 +44,7 @@ public class GridController : MonoBehaviour
 	
 		
 		bool resolve;
-	List<TiledObj> unresolved = list;
+	List<TiledObj> unresolved = new List<TiledObj> ();
 		List<TiledObj> nativeTiles = new List<TiledObj> ();
 		
 		//itterate over all of the tiled object we current have. Only modify the ones that seem to have changed position, eg have velocity. 
@@ -53,7 +53,8 @@ public class GridController : MonoBehaviour
 			tile = list [i];
 			vel = tile.vel;
 			//if the tile has velocity. 
-			if (vel.x != 0 || vel.y != 0) {
+			if (vel.x != 0 || vel.y != 0)
+			{
 				dim = tile.dim;
 				resolve = true;//true until proven otherwise with collision detection.
 				
@@ -71,13 +72,16 @@ public class GridController : MonoBehaviour
 					{
 
 						nativeTile = grid [x,y,j];
+						
 						//if nativeTile is null, then nothing occupies that particular depth. Skip it. 
 						if (nativeTile != null) 
 						{
+							nativeTiles.Add(nativeTile);
 							//if one of the collision has caused a change of velocity in one of said items, then we need to reolve that new velocity. 
+							if(doCollisions){
 							tile.collide(nativeTile);
 								nativeTile.collide(tile);
-							
+							}
 							//if the tile occupying my desired location is solid, then my motion has not yet been resolved. 
 							if (nativeTile.solid)
 							{
@@ -130,9 +134,9 @@ public class GridController : MonoBehaviour
 					}
 				}
 			}
-			resolveTiles (unresolved);
+			resolveTiles (unresolved, false);
 		}
-		resolveTileList.Clear();
+	//	resolveTileList.Clear();
 	}
 	public void insertTile(TiledObj tile){
 		objList.Add(tile);
@@ -163,6 +167,11 @@ public class GridController : MonoBehaviour
 						{
 							grid[x,y,i]=grid[x,y,i+1];
 						}
+					}else if (nativeTile!=null)
+					{
+						nativeTile.onLeave(tile);
+						tile.onLeave(nativeTile);
+					}else{
 						break;
 					}
 				}
@@ -207,7 +216,32 @@ public class GridController : MonoBehaviour
 	public void resolveMovement(TiledObj tile)
 	{
 		if(resolveTileList.IndexOf(tile)<0){
-		resolveTileList.Add(tile);
+		//resolveTileList.Add(tile);
+		}
+	}
+	public void doOverCollide(TiledObj tile)
+	{
+			TiledObj nativeTile;
+			Dimension dim=tile.dim;
+			for (int x=tile.x;
+				x<tile.x+dim.width;
+				x++) 
+		{
+			for (int y=tile.y;
+					y<tile.y+dim.height;
+					y++) 
+			{
+				
+				for (int j=0; j<depth; j++) 
+				{
+					nativeTile = grid [x,y,j];
+				if (nativeTile != tile && nativeTile!=null) 
+					{
+						nativeTile.onOver(tile);
+						tile.onOver(nativeTile);
+					}
+				}
+			}
 		}
 	}
 }
