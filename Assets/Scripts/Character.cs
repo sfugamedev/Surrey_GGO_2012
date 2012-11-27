@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 public class Character : TiledObj 
 {
-	public static uint TILE_TYPE=0x01; //NO, BAD PROGRAMMERS. USE ENUMS
+	public static uint TILE_TYPE=0x01; 
 	
 	// Use this for initialization
 	void Start () {

@@ -129,12 +129,12 @@ public class Level : MonoBehaviour {
 		/////Create cloning prefabs. 
 			GameObject clonerEntrance =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/ClonerEntrance"));
 		ClonerEntrance entrance=clonerEntrance.GetComponent(typeof(ClonerEntrance)) as 	ClonerEntrance;
-		entrance.x=6;
-		entrance.y=6;
+		entrance.x=4;
+		entrance.y=2;
 			grid.insertTile(entrance);
 			GameObject clonerExit =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/ClonerExit"));
 		ClonerExit exit=clonerExit.GetComponent(typeof(ClonerExit)) as 	ClonerExit;
-		exit.x=4;
+		exit.x=5;
 		exit.y=8;
 			grid.insertTile(exit);
 		TriggerController triggerController = TriggerController.createController();
