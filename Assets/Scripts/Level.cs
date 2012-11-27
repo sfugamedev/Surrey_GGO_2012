@@ -124,6 +124,22 @@ public class Level : MonoBehaviour {
 		heroTile.x=2;
 		heroTile.y=2;
 			grid.insertTile(heroTile);
+		
+		/////Create cloning prefabs. 
+			GameObject clonerEntrance =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/ClonerEntrance"));
+		ClonerEntrance entrance=clonerEntrance.GetComponent(typeof(ClonerEntrance)) as 	ClonerEntrance;
+		entrance.x=6;
+		entrance.y=6;
+			grid.insertTile(entrance);
+			GameObject clonerExit =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/ClonerExit"));
+		ClonerExit exit=clonerExit.GetComponent(typeof(ClonerExit)) as 	ClonerExit;
+		exit.x=4;
+		exit.y=8;
+			grid.insertTile(exit);
+		TriggerController triggerController = TriggerController.createController();
+		triggerController.AddReactive(exit);
+			triggerController.AddTrigger(entrance);
+	
 	}
 	
 	public Dimension getLevelDimensions()

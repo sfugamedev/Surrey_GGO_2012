@@ -4,6 +4,7 @@ using System.Collections;
 public class Character : TiledObj 
 {
 	public static uint TILE_TYPE=0x01;
+	
 	// Use this for initialization
 	void Start () {
 	depth=2;
@@ -14,7 +15,8 @@ public class Character : TiledObj
 	private bool up=false;
 	private bool down=false;
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 	//Colin-Rewrite this code. I do not intend for it to be used. Only here for testing my Grid Code
 		float h = Input.GetAxis ("Horizontal");
 		float v = Input.GetAxis ("Vertical");

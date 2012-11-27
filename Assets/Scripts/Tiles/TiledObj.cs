@@ -19,7 +19,7 @@ public class TiledObj : GDCObject {
 	// Use this for initialization
 	public string hello= "hello";
 	public int depth=0;
-	private GridController grid;
+	protected GridController grid;
 	//boolean value used to disable tile movement. Indicates to different systems that the tiel is cirrently animating, or is in some kind of transition. 
 	protected bool _canMove=true;
 	void Start () {
@@ -127,7 +127,8 @@ public class TiledObj : GDCObject {
 		_vel.y=0;
 		
 }
-	public void completeMovement(){
+	public void completeMovement()
+	{
 		
 	}
 	//the physics engine does a collide the instant a tile wants to move into a space. 
@@ -135,6 +136,7 @@ public class TiledObj : GDCObject {
 	//because of this, we have created another kind of collision that needs to be defined by the object animating. 
 	public void movementComplete()
 	{
+		Debug.Log("movementComplete");
 			grid=(GridController)GameObject.FindObjectOfType(typeof(GridController));
 			grid.doOverCollide(this);
 	}
