@@ -57,6 +57,6 @@ public class Character : TiledObj {
 	    if(tile.solid && tile.canMove){
 			tile.setVel(tile.x-x, tile.y-y);
 		}
-		base.collide(tile);
+		//base.collide(tile);
 	}
 }

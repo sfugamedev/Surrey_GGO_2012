@@ -8,7 +8,7 @@ public class TiledObj : GDCObject {
 	private Point _pos = new Point(0,0);
 	//grid value's representing dimensions.
 	private Dimension _dim=new Dimension(1,1);
-	public static int TILE_SIZE = 6;
+	public static int TILE_SIZE = 16;
 	//used to determine whether this particular tiled object should be solid, not allowing objects to pass through or over it. 
 	//READ ONLY
 	protected bool _solid;
@@ -17,7 +17,7 @@ public class TiledObj : GDCObject {
 	private Point _vel;
 	protected uint _tileType;
 	// Use this for initialization
-	public string hello= "hello";
+	public string prefabName= "Tile";
 	public int depth=0;
 	void Start () {
 		//does start get called more than once? SOmething like that. Was breaking my stuff. So I needed to instantiate  _point up above. 
@@ -36,7 +36,7 @@ public class TiledObj : GDCObject {
 	}
 	protected void moveTile(){
 		int tileSize= TILE_SIZE;
-		Vector3 setPos = new Vector3(transform.position.x+(_pos.x*tileSize-transform.position.x)/40, depth,transform.position.z+(_pos.y*tileSize-transform.position.z)/40);
+		Vector3 setPos = new Vector3(transform.position.x+(_pos.x*tileSize-transform.position.x)/40, transform.position.y+(_pos.y*tileSize-transform.position.y)/40, depth*-1);
 		//Simply calling position.Set() did not change the positon. Need to set it to a new Vector3 object. 
 		this.transform.position=setPos;
 	}

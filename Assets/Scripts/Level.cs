@@ -116,6 +116,14 @@ public class Level : MonoBehaviour {
 		heroTile.x=2;
 		heroTile.y=2;
 			grid.insertTile(heroTile);
+		
+		// add a clone block:
+		GameObject clonePadResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/ClonePad"));
+		CloneBlock cloneTile=clonePadResource.GetComponent(typeof(CloneBlock)) as CloneBlock;
+		cloneTile.x=3;
+		cloneTile.y=1;
+		cloneTile.setSpawnPoint(7, 7);
+			grid.insertTile(cloneTile);
 	}
 	
 	public Dimension getLevelDimensions()
