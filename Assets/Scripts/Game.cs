@@ -12,26 +12,24 @@ public class Game : MonoBehaviour{
 	
 	// Use this for initialization
 	void Start () {
-		
-		grid = new GridController();
-		
-		// Pass tile object to level
-		level = new Level(grid, tileObject);
+		GameObject levelResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Level"));
+		level=levelResource.GetComponent(typeof(Level)) as Level;
+	
+	//grid = new GridController();
+	
+	// Pass tile object to level
+	//level = new Level(grid, tileObject);
 	
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	grid.updateGrid();
-	}
 	
 	public Level getLevel()
 	{
 		return level;
 	}
-	
-	public GridController getGridController()
-	{
-		return grid;
+	// Update is called once per frame
+	void Update () {
+	//grid.updateGrid();
 	}
 }
+

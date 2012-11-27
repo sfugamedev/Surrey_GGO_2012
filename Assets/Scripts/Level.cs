@@ -10,7 +10,7 @@ public class Level : MonoBehaviour {
 	public GameObject tileObject;
 	
 	// Use this for initialization
-	public Level(GridController grid, GameObject tileObject)
+	/*public Level(GridController grid, GameObject tileObject)
 	{
 		this.grid = grid;
 		
@@ -21,6 +21,14 @@ public class Level : MonoBehaviour {
 		grid.initializeLevel(levelDim);
 		
 		initLevel ();
+	}*/
+		void Start(){
+		GameObject gridResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Grid"));
+		
+		grid=gridResource.GetComponent(typeof(GridController)) as GridController;
+		levelDim= new Dimension(10,10);
+		grid.initializeLevel(levelDim);
+		initLevel();
 	}
 
 	private Point newPos;

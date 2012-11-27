@@ -5,31 +5,32 @@ using UnityEngine;
 public class GridController : MonoBehaviour
 {
 	private  List<TiledObj> objList;
+		private  List<TiledObj> tmpResolveTileList;
+	
+	private  List<TiledObj> resolveTileList;
+	
 	//depth represents the depth of the tiled map. how many tiles can occupy a single space. 
 	private int depth = 3;
 	/*a 3D array that represents the current state of the level as it sits in the grid. 
 	will allow game to quickly and efficiently look up the current state of the grid for collision and interaction. 
 	changes are made to the array only when object move withint the space. */
 	private TiledObj[,,] grid;
-
-	public GridController ()
 	
-	{
-		objList = new List<TiledObj> ();
-	}
+
 	// Use this for initialization
 	void Start ()
 	{
-		
+		//objList = new List<TiledObj> ();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		
+		updateGrid();
 	}
 	public void updateGrid(){
-		resolveTiles(objList);
+		//resolveTiles(objList);
+		resolveTiles(resolveTileList);
 	}
 
 	private void resolveTiles (List<TiledObj> list)
@@ -43,7 +44,7 @@ public class GridController : MonoBehaviour
 	
 		
 		bool resolve;
-	List<TiledObj> unresolved = new List<TiledObj> ();
+	List<TiledObj> unresolved = list;
 		List<TiledObj> nativeTiles = new List<TiledObj> ();
 		
 		//itterate over all of the tiled object we current have. Only modify the ones that seem to have changed position, eg have velocity. 
@@ -73,11 +74,10 @@ public class GridController : MonoBehaviour
 						//if nativeTile is null, then nothing occupies that particular depth. Skip it. 
 						if (nativeTile != null) 
 						{
+							//if one of the collision has caused a change of velocity in one of said items, then we need to reolve that new velocity. 
 							tile.collide(nativeTile);
-							nativeTile.collide(tile);
-							//create a list of native tiles. There is a chance that this collision caused some change in velocity 
-							//in the native tile. We may have to resolve that velocity before we are finished, hence storing it to check later. 
-							nativeTiles.Add(nativeTile);
+								nativeTile.collide(tile);
+							
 							//if the tile occupying my desired location is solid, then my motion has not yet been resolved. 
 							if (nativeTile.solid)
 							{
@@ -102,6 +102,7 @@ public class GridController : MonoBehaviour
 				//TODO: If we hit something, velocity will have been set to 0 within the if statement. 
 				//so here, just move the object according to its remaining velocity. 
 			}
+			
 		}
 		if(unresolved.Count==0 || unresolved.Count==list.Count)
 		{
@@ -123,11 +124,15 @@ public class GridController : MonoBehaviour
 				//if the veslocity did in fact change, then add it to the list of unresolved objects to be resolved next pass. 
 			if (vel.x != 0 || vel.y != 0) 
 				{
+					//if said tile is not already in the list. Innifficient, because the tile may be included in the nativeTiles list more than once. 
+					if(unresolved.IndexOf(tile)<0){
 					unresolved.Add(tile);
+					}
 				}
 			}
 			resolveTiles (unresolved);
 		}
+		resolveTileList.Clear();
 	}
 	public void insertTile(TiledObj tile){
 		objList.Add(tile);
@@ -194,8 +199,16 @@ public class GridController : MonoBehaviour
 	{
 		/*take the width and height of the level, and the fact that we are going to allow 3 tiles to sit in the same location, hense the 3D space. 
 		we may even use this depth as our means of layering elements such as items over top of other tiles. 
-	    each tile would have a desired depth, 0, 1, or 2. We would render them as best we could. */
+	each tile would have a desired depth, 0, 1, or 2. We would render them as best we could. */
 		grid = new TiledObj[dim.width, dim.height, depth];
+			objList = new List<TiledObj> ();
+		resolveTileList = new List<TiledObj> ();
+	}
+	public void resolveMovement(TiledObj tile)
+	{
+		if(resolveTileList.IndexOf(tile)<0){
+		resolveTileList.Add(tile);
+		}
 	}
 }
 
