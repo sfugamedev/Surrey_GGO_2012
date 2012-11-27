@@ -13,7 +13,8 @@ using UnityEngine;
 	public override void SetActive (bool value)
 	{
 		base.SetActive (value);
-		if(value){
+		if(value)
+		{
 				// add the hero:
 		GameObject heroResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Hero"));
 		TiledObj heroTile=heroResource.GetComponent(typeof(Character)) as TiledObj;

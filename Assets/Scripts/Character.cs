@@ -8,6 +8,7 @@ public class Character : TiledObj
 	// Use this for initialization
 	void Start () {
 	depth=2;
+		_solid=true;
 		this._tileType=TILE_TYPE;
 	}
 	private bool right=false;

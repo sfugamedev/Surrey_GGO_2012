@@ -136,7 +136,6 @@ public class TiledObj : GDCObject {
 	//because of this, we have created another kind of collision that needs to be defined by the object animating. 
 	public void movementComplete()
 	{
-		Debug.Log("movementComplete");
 			grid=(GridController)GameObject.FindObjectOfType(typeof(GridController));
 			grid.doOverCollide(this);
 	}
