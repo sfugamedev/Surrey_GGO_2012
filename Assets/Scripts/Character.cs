@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using System.Xml;
+using System.Xml.Serialization;
 
 public class Character : TiledObj 
 {
-	public static uint TILE_TYPE=0x01;
+	public static uint TILE_TYPE=0x01; //NO, BAD PROGRAMMERS. USE ENUMS
 	
 	// Use this for initialization
 	void Start () {

@@ -9,6 +9,7 @@ public class Level : MonoBehaviour {
 	// Look at Game Script on Plane object
 	public GameObject tileObject;
 	
+	
 	// Use this for initialization
 	/*public Level(GridController grid, GameObject tileObject)
 	{
@@ -146,5 +147,20 @@ public class Level : MonoBehaviour {
 	{
 		return levelDim;
 	}
+	
+	
+	/**
+	 * TESTING Xml writing!
+	 */
+	public void Update()
+	{
+		//Debug.Log("Wananana");
+		if(Input.GetKeyDown("1"))
+		{
+			grid.Save("testaroni");
+			Debug.Log("Saved to testaroni");
+		}
+	}
+	 
 
 }

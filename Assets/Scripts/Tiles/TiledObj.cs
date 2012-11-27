@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using System.Xml;
+using System.Xml.Serialization;
 
 public class TiledObj : GDCObject {
 	//TiledObj class represents any object that can be displayed and manipulated withing the grid structure of the game. 

@@ -1,12 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Serialization;
 using UnityEngine;
+using System.IO;
 
+[XmlRoot("GridController")]
 public class GridController : MonoBehaviour
 {
+	//Why are there so many lists lol
+	[XmlArray("objList"),XmlArrayItem("TiledObj")]
 	private  List<TiledObj> objList;
-		private  List<TiledObj> tmpResolveTileList;
-	
+	[XmlArray("tmpResolveTileList"),XmlArrayItem("TiledObj")]
+	private  List<TiledObj> tmpResolveTileList;
+	[XmlArray("objList"),XmlArrayItem("TiledObj")]
 	private  List<TiledObj> resolveTileList;
 	
 	//depth represents the depth of the tiled map. how many tiles can occupy a single space. 
@@ -14,6 +21,7 @@ public class GridController : MonoBehaviour
 	/*a 3D array that represents the current state of the level as it sits in the grid. 
 	will allow game to quickly and efficiently look up the current state of the grid for collision and interaction. 
 	changes are made to the array only when object move withint the space. */
+	[XmlArray("grid"),XmlArrayItem("TiledObj")]
 	private TiledObj[,,] grid;
 	
 
@@ -23,11 +31,31 @@ public class GridController : MonoBehaviour
 		//objList = new List<TiledObj> ();
 	}
 	
+	// Save grid with given filename
+ 	public void Save(string path)
+ 	{
+ 		var serializer = new XmlSerializer(typeof(GridController));
+ 		using(var stream = new FileStream(Path.Combine(Application.dataPath, path+".xml"), FileMode.Create))
+ 		{
+ 			serializer.Serialize(stream, this);
+ 		}
+ 	}	
+	
+	// Load grid with given filename
+	public static GridController Load(string path){
+ 		var serializer = new XmlSerializer(typeof(GridController));
+ 		using(var stream = new FileStream(path, FileMode.Open))
+ 		{
+ 			return serializer.Deserialize(stream) as GridController;
+ 		}
+	}
+	
 	// Update is called once per frame
 	void Update ()
 	{
 		updateGrid();
 	}
+	
 	public void updateGrid(){
 		//resolveTiles(objList);
 		resolveTiles(objList, true);
