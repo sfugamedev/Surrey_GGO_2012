@@ -189,6 +189,9 @@ public class GridController : MonoBehaviour
 					//add to the end of the depth list.  
 					if (nativeTile == tile) 
 					{
+						//if tile has been found, then the last index will always be null. 
+						//shift loop was not causing the last index to null. 
+						grid[x,y,depth-1]=null;
 						//if I found the location of where the current tile sits in the depth, then remove it.
 						//we are just shifting the list one space to the left. will overrite the current tile, and keep the list from becoming staggard. 
 						for(int i=j;i<depth-1;i++)

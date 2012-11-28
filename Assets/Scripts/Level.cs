@@ -127,6 +127,8 @@ public class Level : MonoBehaviour {
 			grid.insertTile(heroTile);
 		
 		/////Create cloning prefabs. 
+		///
+		////
 			GameObject clonerEntrance =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/ClonerEntrance"));
 		ClonerEntrance entrance=clonerEntrance.GetComponent(typeof(ClonerEntrance)) as 	ClonerEntrance;
 		entrance.x=4;
@@ -140,6 +142,25 @@ public class Level : MonoBehaviour {
 		TriggerController triggerController = TriggerController.createController();
 		triggerController.AddReactive(exit);
 			triggerController.AddTrigger(entrance);
+		///
+		///
+		///
+		/////Create button and door prefabs.  
+			GameObject buttonTile =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/ButtonTile"));
+		MonoTrigger button=buttonTile.GetComponent(typeof(MonoTrigger)) as 	MonoTrigger;
+		 button.x=5;
+		 button.y=2;
+			grid.insertTile(button);
+			GameObject doorTile =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Door"));
+		DoorTile door=doorTile.GetComponent(typeof(DoorTile)) as 	DoorTile;
+		door.x=6;
+		door.y=6;
+			grid.insertTile(door);
+		TriggerController buttonTriggerController = TriggerController.createController();
+		buttonTriggerController.AddReactive(door);
+			buttonTriggerController.AddTrigger(button);
+		///
+		////
 	
 	}
 	
