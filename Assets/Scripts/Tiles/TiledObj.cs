@@ -56,7 +56,7 @@ public class TiledObj : GDCObject {
 		Vector3 setPos = new Vector3(transform.position.x+dx/40, depth,transform.position.z+dy/40);
 		//Simply calling position.Set() did not change the positon. Need to set it to a new Vector3 object. 
 		this.transform.position=setPos;
-		if(dx+dy<1)
+		if(Mathf.Abs(dx)+Mathf.Abs(dy)<1)
 		{
 			if(isMoving)
 			{
@@ -138,6 +138,7 @@ public class TiledObj : GDCObject {
 	//because of this, we have created another kind of collision that needs to be defined by the object animating. 
 	public void movementComplete()
 	{
+		Debug.Log ("movementComplete");
 			grid=(GridController)GameObject.FindObjectOfType(typeof(GridController));
 			grid.doOverCollide(this);
 	}
