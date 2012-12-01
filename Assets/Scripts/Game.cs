@@ -29,6 +29,10 @@ public class Game : MonoBehaviour{
 	}
 	// Update is called once per frame
 	void Update () {
+		if(Input.GetButton("Restart"))
+		{
+			Application.LoadLevel(0);
+		}
 	//grid.updateGrid();
 	}
 }
