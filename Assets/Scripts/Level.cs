@@ -161,6 +161,26 @@ public class Level : MonoBehaviour {
 			buttonTriggerController.AddTrigger(button);
 		///
 		////
+			/////Create treadmill objects
+			GameObject treadmillTile =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Treadmill"));
+		TreadmillTile treadmill=treadmillTile.GetComponent(typeof(TreadmillTile)) as 	TreadmillTile;
+		 treadmill.x=1;
+		 treadmill.y=2;
+			grid.insertTile(treadmill);
+		//
+		treadmillTile =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Treadmill"));
+		 treadmill=treadmillTile.GetComponent(typeof(TreadmillTile)) as 	TreadmillTile;
+		 treadmill.x=1;
+		 treadmill.y=3;
+			grid.insertTile(treadmill);
+		treadmillTile =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Treadmill"));
+		 treadmill=treadmillTile.GetComponent(typeof(TreadmillTile)) as 	TreadmillTile;
+		 treadmill.x=1;
+		 treadmill.y=4;
+			grid.insertTile(treadmill);
+			
+		///
+		////
 	
 	}
 	

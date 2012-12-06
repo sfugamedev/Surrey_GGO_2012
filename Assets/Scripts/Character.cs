@@ -21,6 +21,7 @@ public class Character : TiledObj
 	void Update () 
 	{
 	//Colin-Rewrite this code. I do not intend for it to be used. Only here for testing my Grid Code
+		if(!base.isMoving){
 		float h = Input.GetAxis ("Horizontal");
 		float v = Input.GetAxis ("Vertical");
 		if(h>0)
@@ -57,6 +58,8 @@ public class Character : TiledObj
 		}else{
 			up=false;
 			down=false;
+		}
+		
 		}
 		moveTile ();
 	}
