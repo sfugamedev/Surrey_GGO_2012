@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Timers;
 
 public class TiledObj : GDCObject {
 	//TiledObj class represents any object that can be displayed and manipulated withing the grid structure of the game. 
@@ -24,6 +25,16 @@ public class TiledObj : GDCObject {
 	protected GridController grid;
 	//boolean value used to disable tile movement. Indicates to different systems that the tiel is cirrently animating, or is in some kind of transition. 
 	protected bool _canMove=true;
+	private float oldX;
+	private float oldY;
+	private float moveAngle;
+	private float cos;
+	private float sin;
+	private float startMoveTime;
+	private float moveTime=30;
+	private float moveDist;
+	private float dx;
+	private float dy;
 	void Start () {
 		//does start get called more than once? SOmething like that. Was breaking my stuff. So I needed to instantiate  _point up above. 
 		//__pos=new Point(0,0);
@@ -50,21 +61,27 @@ public class TiledObj : GDCObject {
 	}
 	protected void moveTile()
 	{
-		int tileSize=TILE_SIZE;
-		float dx = _pos.x*tileSize-transform.position.x;
-			float dy = _pos.y*tileSize-transform.position.z;
-		Vector3 setPos = new Vector3(transform.position.x+dx/40, depth,transform.position.z+dy/40);
-		//Simply calling position.Set() did not change the positon. Need to set it to a new Vector3 object. 
-		this.transform.position=setPos;
-		if(Mathf.Abs(dx)+Mathf.Abs(dy)<1)
+		float timeDiff=Time.fixedTime*100-startMoveTime;
+			if(timeDiff>=moveTime)
 		{
 			if(isMoving)
 			{
 				isMoving=false;
 				movementComplete();
+				Vector3 setPos = new Vector3(
+				oldX+cos*moveDist,
+				depth,
+				oldY+sin*moveDist
+				);
+				this.transform.position=setPos;
 			}
 		}else{
-			isMoving=true;
+			Vector3 setPos = new Vector3(
+				oldX+cos*((timeDiff/moveTime)*moveDist),
+				depth,
+				oldY+sin*((timeDiff/moveTime)*moveDist)
+				);
+			this.transform.position=setPos;
 		}
 	}
 		public Point vel{
@@ -103,9 +120,20 @@ public class TiledObj : GDCObject {
 	}
 	public void setPos(int x, int y)
 	{
+		//convert from seconds to milli
+		startMoveTime=Time.fixedTime*100;
+		isMoving=true;
+		oldX=transform.position.x;
+		oldY=transform.position.z;
+		dx=(x*TILE_SIZE-oldX);
+		dy=(y*TILE_SIZE-oldY);
+		moveDist = Mathf.Sqrt(dx*dx+dy*dy);
+		moveAngle=Mathf.Atan2(dy,dx);
+		cos=Mathf.Cos(moveAngle);
+		sin=Mathf.Sin(moveAngle);
+
 		_pos.x=x;
 		_pos.y=y;
-		
 }
 		public void setVel(int x, int y)
 	{
@@ -141,5 +169,12 @@ public class TiledObj : GDCObject {
 		Debug.Log ("movementComplete");
 			grid=(GridController)GameObject.FindObjectOfType(typeof(GridController));
 			grid.doOverCollide(this);
-	}
+	}public class Timer1
+ {
+ 
+     public static void Main()
+     {
+      
+     }
+ }
 }

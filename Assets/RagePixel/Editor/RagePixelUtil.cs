@@ -285,8 +285,9 @@ public static class RagePixelUtil {
             ));
     }
 
-    public static void RebuildAtlas(RagePixelSpriteSheet spriteSheet, bool atlasIsGrowing, string caller = "nobody")
+    public static void RebuildAtlas(RagePixelSpriteSheet spriteSheet, bool atlasIsGrowing, string caller)
     {
+		caller = "nobody";
         int frameCount = spriteSheet.GetTotalCellCount();
 
         Texture2D[] textures = new Texture2D[frameCount];

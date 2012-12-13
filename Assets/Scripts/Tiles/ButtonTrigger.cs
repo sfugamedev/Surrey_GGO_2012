@@ -17,17 +17,11 @@ using UnityEngine;
 		base.onOver (tile);
 		if(tile.tileType==Character.TILE_TYPE)
 		{
+			Debug.Log("TriggerOverSET TRIGGER");
 		this.SetTriggered(true);
 		}
 		
 	}
-		public override void onLeave(TiledObj tile)
-	{
-		base.onLeave (tile);
-		if(tile.tileType==Character.TILE_TYPE)
-		{
-		this.SetTriggered(false);
-		}
 	}
-	}
+	
 

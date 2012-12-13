@@ -15,9 +15,10 @@ using UnityEngine;
 	public override void onOver (TiledObj tile)
 	{
 		base.onOver (tile);
+
 		if (tile.tileType == Character.TILE_TYPE) 
 		{
-			
+
 			this.SetTriggered (true);
 		}
 	}
