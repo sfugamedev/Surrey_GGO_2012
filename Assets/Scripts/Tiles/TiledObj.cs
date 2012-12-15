@@ -18,7 +18,7 @@ public class TiledObj : GDCObject {
 	protected bool isMoving=false;
 	//represents the velocity of the tile through space. 
 	private Point _vel;
-	protected uint _tileType;
+	protected uint _tileType=0x00;
 	// Use this for initialization
 	public string hello= "hello";
 	public int depth=0;
@@ -31,7 +31,7 @@ public class TiledObj : GDCObject {
 	private float cos;
 	private float sin;
 	private float startMoveTime;
-	private float moveTime=30;
+	protected float moveTime=30;
 	private float moveDist;
 	private float dx;
 	private float dy;
@@ -40,7 +40,7 @@ public class TiledObj : GDCObject {
 		//__pos=new Point(0,0);
 		
 		//_dim=
-		_tileType=0x00;
+		
 		grid=(GridController)GameObject.FindObjectOfType(typeof(GridController));
 	}
 	public void hit(TiledObj obj){
@@ -166,7 +166,6 @@ public class TiledObj : GDCObject {
 	//because of this, we have created another kind of collision that needs to be defined by the object animating. 
 	public void movementComplete()
 	{
-		Debug.Log ("movementComplete");
 			grid=(GridController)GameObject.FindObjectOfType(typeof(GridController));
 			grid.doOverCollide(this);
 	}public class Timer1

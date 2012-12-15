@@ -23,6 +23,7 @@ public class GridController : MonoBehaviour
 	changes are made to the array only when object move withint the space. */
 	[XmlArray("grid"),XmlArrayItem("TiledObj")]
 	private TiledObj[,,] grid;
+	private Dimension dim;
 	
 
 	// Use this for initialization
@@ -32,57 +33,55 @@ public class GridController : MonoBehaviour
 	}
 	
 	// Save grid with given filename
- 	public void Save(string path)
- 	{
- 		var serializer = new XmlSerializer(typeof(GridController));
- 		using(var stream = new FileStream(Path.Combine(Application.dataPath, path+".xml"), FileMode.Create))
- 		{
- 			serializer.Serialize(stream, this);
- 		}
- 	}	
+	public void Save (string path)
+	{
+		var serializer = new XmlSerializer (typeof(GridController));
+		using (var stream = new FileStream(Path.Combine(Application.dataPath, path+".xml"), FileMode.Create)) {
+			serializer.Serialize (stream, this);
+		}
+	}	
 	
 	// Load grid with given filename
-	public static GridController Load(string path){
- 		var serializer = new XmlSerializer(typeof(GridController));
- 		using(var stream = new FileStream(path, FileMode.Open))
- 		{
- 			return serializer.Deserialize(stream) as GridController;
- 		}
+	public static GridController Load (string path)
+	{
+		var serializer = new XmlSerializer (typeof(GridController));
+		using (var stream = new FileStream(path, FileMode.Open)) {
+			return serializer.Deserialize (stream) as GridController;
+		}
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		updateGrid();
+		updateGrid ();
 	}
 	
-	public void updateGrid(){
+	public void updateGrid ()
+	{
 		//resolveTiles(objList);
-		resolveTiles(objList, true);
+		resolveTiles (objList, true);
 	}
 
 	private void resolveTiles (List<TiledObj> list, bool doCollisions)
 	{
 		TiledObj[] depthList;
-	TiledObj tile;
+		TiledObj tile;
 		TiledObj nativeTile;
-	 Point vel;
+		Point vel;
 		Dimension dim;
-		 Point newPos = new Point(0,0);
+		Point newPos = new Point (0, 0);
 	
 		
 		bool resolve;
-	List<TiledObj> unresolved = new List<TiledObj> ();
+		List<TiledObj> unresolved = new List<TiledObj> ();
 		List<TiledObj> nativeTiles = new List<TiledObj> ();
 		
 		//itterate over all of the tiled object we current have. Only modify the ones that seem to have changed position, eg have velocity. 
-		for (int i=0; i<list.Count; i++)
-		{
+		for (int i=0; i<list.Count; i++) {
 			tile = list [i];
 			vel = tile.vel;
 			//if the tile has velocity. 
-			if (vel.x != 0 || vel.y != 0)
-			{
+			if (vel.x != 0 || vel.y != 0) {
 				dim = tile.dim;
 				resolve = true;//true until proven otherwise with collision detection.
 				
@@ -96,36 +95,33 @@ public class GridController : MonoBehaviour
 					y++)
 					//TODO: right now, assumes that we are always checking within the bounds of the level. We need to make an efficient check for this beforehand. 
 						
-					for (int j=0; j<depth; j++)
-					{
+						for (int j=0; j<depth; j++) {
 
-						nativeTile = grid [x,y,j];
+							nativeTile = grid [x, y, j];
 						
-						//if nativeTile is null, then nothing occupies that particular depth. Skip it. 
-						if (nativeTile != null) 
-						{
-							nativeTiles.Add(nativeTile);
-							//if one of the collision has caused a change of velocity in one of said items, then we need to reolve that new velocity. 
-							if(doCollisions){
-							tile.collide(nativeTile);
-								nativeTile.collide(tile);
+							//if nativeTile is null, then nothing occupies that particular depth. Skip it. 
+							if (nativeTile != null) {
+								nativeTiles.Add (nativeTile);
+								//if one of the collision has caused a change of velocity in one of said items, then we need to reolve that new velocity. 
+								if (doCollisions) {
+									tile.collide (nativeTile);
+									nativeTile.collide (tile);
+								}
+								//if the tile occupying my desired location is solid, then my motion has not yet been resolved. 
+								if (nativeTile.solid) {
+									resolve = false;
+								}
+							} else {
+								//if it is null, then break. We will not allow gaps in depth to make things runs faster. 
+								break;
 							}
-							//if the tile occupying my desired location is solid, then my motion has not yet been resolved. 
-							if (nativeTile.solid)
-							{
-								resolve = false;
-							}
-						} else {
-							//if it is null, then break. We will not allow gaps in depth to make things runs faster. 
-							break;
 						}
-					}
 				}
 				if (resolve) {
 					//if resolved is true, then resolve the tile movement.
-					newPos.x=tile.pos.x+tile.vel.x;
-					newPos.y=tile.pos.y+tile.vel.y;
-					moveTile(tile,newPos);
+					newPos.x = tile.pos.x + tile.vel.x;
+					newPos.y = tile.pos.y + tile.vel.y;
+					moveTile (tile, newPos);
 				} else {
 					//if resolve is false, do not resolve motion. 
 					//add to list of unresolved tiles. 
@@ -136,46 +132,45 @@ public class GridController : MonoBehaviour
 			}
 			
 		}
-		if(unresolved.Count==0 || unresolved.Count==list.Count)
-		{
+		if (unresolved.Count == 0 || unresolved.Count == list.Count) {
 			
 			//if unresolved count is 0, then all items have been resolved and we can finish all collision code. 
 			//if the input list is the same length as we have unresolved tiles, then it is impossible to resolve any more than what we have. We are done. 
-			for(int i=0;i<unresolved.Count;i++)
-			{
-				unresolved[i].stopVel();
+			for (int i=0; i<unresolved.Count; i++) {
+				unresolved [i].stopVel ();
 			}
-		}else{
+		} else {
 			//else, continue to resolve tiles. 
 			//
 			//check all of the tiles that were collided with. Some velocities may have changed. 
-			for(int i=0;i<nativeTiles.Count;i++)
-			{
+			for (int i=0; i<nativeTiles.Count; i++) {
 				tile = nativeTiles [i];
-			vel = tile.vel;
+				vel = tile.vel;
 				//if the veslocity did in fact change, then add it to the list of unresolved objects to be resolved next pass. 
-			if (vel.x != 0 || vel.y != 0) 
-				{
+				if (vel.x != 0 || vel.y != 0) {
 					//if said tile is not already in the list. Innifficient, because the tile may be included in the nativeTiles list more than once. 
-					if(unresolved.IndexOf(tile)<0){
-					unresolved.Add(tile);
+					if (unresolved.IndexOf (tile) < 0) {
+						unresolved.Add (tile);
 					}
 				}
 			}
 			resolveTiles (unresolved, false);
 		}
-	//	resolveTileList.Clear();
+		//	resolveTileList.Clear();
 	}
-	public void insertTile(TiledObj tile){
-		objList.Add(tile);
+
+	public void insertTile (TiledObj tile)
+	{
+		objList.Add (tile);
 		
 		moveTile (tile, tile.vel);
 	}
+
 	private void moveTile (TiledObj tile, Point newPos)
 	{
 		TiledObj nativeTile;
-	Dimension dim=tile.dim;
-			//REMOVE TILE FROM OLD POSITION
+		Dimension dim = tile.dim;
+		//REMOVE TILE FROM OLD POSITION
 		for (int x=tile.x;
 				x<tile.x+dim.width;
 				x++) {
@@ -185,24 +180,21 @@ public class GridController : MonoBehaviour
 				
 				for (int j=0; j<depth; j++) {
 					
-					nativeTile = grid [x,y,j];
+					nativeTile = grid [x, y, j];
 					//add to the end of the depth list.  
-					if (nativeTile == tile) 
-					{
+					if (nativeTile == tile) {
 						//if tile has been found, then the last index will always be null. 
 						//shift loop was not causing the last index to null. 
-						grid[x,y,depth-1]=null;
+						grid [x, y, depth - 1] = null;
 						//if I found the location of where the current tile sits in the depth, then remove it.
 						//we are just shifting the list one space to the left. will overrite the current tile, and keep the list from becoming staggard. 
-						for(int i=j;i<depth-1;i++)
-						{
-							grid[x,y,i]=grid[x,y,i+1];
+						for (int i=j; i<depth-1; i++) {
+							grid [x, y, i] = grid [x, y, i + 1];
 						}
-					}else if (nativeTile!=null)
-					{
-						nativeTile.onLeave(tile);
-						tile.onLeave(nativeTile);
-					}else{
+					} else if (nativeTile != null) {
+						nativeTile.onLeave (tile);
+						tile.onLeave (nativeTile);
+					} else {
 						break;
 					}
 				}
@@ -211,28 +203,25 @@ public class GridController : MonoBehaviour
 		//ADD TO NEW POSITION
 		for (int x=newPos.x;
 				x<newPos.x+dim.width;
-				x++)
-		{
+				x++) {
 			for (int y=newPos.y;
 					y<newPos.y+dim.height;
-					y++) 
-			{
+					y++) {
 				
 				for (int j=0; j<depth; j++) {
-					nativeTile = grid [x,y,j];
+					nativeTile = grid [x, y, j];
 					//add to the end of the depth list.  
-					if (nativeTile == null)
-					{
+					if (nativeTile == null) {
 						//if there is no tile occupying that particular depth, then occupy it. 
-					grid[x,y,j]=tile;
+						grid [x, y, j] = tile;
 						//break, we only want to occupy 1 space of depth. 
 						break;
 					}
 				}
 			}
 		}
-		tile.setPos(newPos.x, newPos.y);
-		tile.stopVel();
+		tile.setPos (newPos.x, newPos.y);
+		tile.stopVel ();
 	}
 	
 	public void initializeLevel (Dimension dim)
@@ -241,39 +230,101 @@ public class GridController : MonoBehaviour
 		we may even use this depth as our means of layering elements such as items over top of other tiles. 
 	each tile would have a desired depth, 0, 1, or 2. We would render them as best we could. */
 		grid = new TiledObj[dim.width, dim.height, depth];
-			objList = new List<TiledObj> ();
+		objList = new List<TiledObj> ();
 		resolveTileList = new List<TiledObj> ();
+		this.dim = dim;
 	}
-	public void resolveMovement(TiledObj tile)
+
+	public void resolveMovement (TiledObj tile)
 	{
-		if(resolveTileList.IndexOf(tile)<0){
-		//resolveTileList.Add(tile);
+		if (resolveTileList.IndexOf (tile) < 0) {
+			//resolveTileList.Add(tile);
 		}
 	}
-	public void doOverCollide(TiledObj tile)
+
+	public void doOverCollide (TiledObj tile)
 	{
-			TiledObj nativeTile;
-			Dimension dim=tile.dim;
-			for (int x=tile.x;
+		TiledObj nativeTile;
+		Dimension dim = tile.dim;
+		for (int x=tile.x;
 				x<tile.x+dim.width;
-				x++) 
-		{
+				x++) {
 			for (int y=tile.y;
 					y<tile.y+dim.height;
-					y++) 
-			{
+					y++) {
 				
-				for (int j=0; j<depth; j++) 
-				{
-					nativeTile = grid [x,y,j];
-				if (nativeTile != tile && nativeTile!=null) 
-					{
-						nativeTile.onOver(tile);
-						tile.onOver(nativeTile);
+				for (int j=0; j<depth; j++) {
+					nativeTile = grid [x, y, j];
+					if (nativeTile != tile && nativeTile != null) {
+						nativeTile.onOver (tile);
+						tile.onOver (nativeTile);
 					}
 				}
 			}
 		}
+	}
+
+	private bool isWithinRange (Point location)
+	{
+		return isWithinRange (location.x, location.y);
+	}
+
+	private bool isWithinRange (int x, int y)
+	{
+		
+		return (x >= 0 && x < dim.width) && (y >= 0 && y < dim.height);
+	}
+	//returns a list of tiles at a specific location and radius. 
+	public TiledObj[] getTilesAt (Point location, int radius)
+	{
+
+		TiledObj nativeTile;
+		TiledObj[] output;
+		//a list that will contain all object found with the radius. We need to trim this before returning it though. 
+		//not super efficient, but for the sake of returning a trimmed array as opposed to one that would contain null index's. 
+		TiledObj[] allInRadius = new TiledObj[depth + radius * radius * depth];
+		int tileCount = 0;
+		for (int x=location.x-radius;
+				x<=location.x+radius;
+				x++) 
+		{
+			for (int y=location.y-radius;
+					y<=location.y+radius;
+					y++) 
+			{
+				if (isWithinRange (x, y))
+				{
+					for (int j=0; j<depth; j++) 
+				{
+						nativeTile = grid [x, y, j];
+						if (nativeTile != null)
+						{
+						allInRadius [tileCount] = nativeTile;
+							tileCount++;
+							
+						}
+				}
+			}
+			}
+		}
+		output = new TiledObj[tileCount];
+		//reset the variable, use it again in this next loop. 
+		tileCount = 0;
+		//this code will trim the larger array created before being returned. 
+		for (int i=0; i<allInRadius.Length; i++) 
+		{
+			if (allInRadius [i] != null) {
+				
+				output [tileCount++] = allInRadius [i];
+			}
+		}
+	Debug.Log(output.Length);
+		return output;
+	}
+
+	public TiledObj[] getTilesAt (Point location)
+	{
+		return getTilesAt (location, 0);
 	}
 }
 

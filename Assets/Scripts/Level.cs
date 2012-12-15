@@ -181,6 +181,14 @@ public class Level : MonoBehaviour {
 			
 		///
 		////
+		//CREATE THE GAS TEST
+				GameObject gasResource =  (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Gas"));
+			GasTile gasTile=gasResource.GetComponent(typeof(GasTile)) as GasTile;
+			gasTile.x=7;
+			gasTile.y=7;
+				grid.insertTile(gasTile);
+			
+		
 	
 	}
 	
